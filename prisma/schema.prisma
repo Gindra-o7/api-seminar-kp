@@ -44,6 +44,7 @@ enum LogType {
 model Mahasiswa {
   nim           String     @id @unique
   nama          String
+  noTelepon     String
 
   dokumen       Dokumen[]
   jadwalSeminar Jadwal[]
@@ -51,9 +52,10 @@ model Mahasiswa {
 }
 
 model Dosen {
-  nip           String   @id @unique
-  email         String   @unique
-  nama          String
+  nip               String   @id @unique
+  email             String   @unique
+  nama              String
+  noTelepon         String
 
   jadwalSeminar          Jadwal[]
   nilaiPenguji      Nilai[] @relation("NilaiToPenguji")
