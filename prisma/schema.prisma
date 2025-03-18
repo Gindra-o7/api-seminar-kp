@@ -46,7 +46,7 @@ model Mahasiswa {
   nama          String
 
   dokumen       Dokumen[]
-  jadwalSeminar JadwalSeminar[]
+  jadwalSeminar Jadwal[]
   nilai         Nilai[]
 }
 
@@ -55,7 +55,7 @@ model Dosen {
   email         String   @unique
   nama          String
 
-  jadwalSeminar          JadwalSeminar[]
+  jadwalSeminar          Jadwal[]
   logJadwal              LogJadwal[]
   nilaiPenguji      Nilai[] @relation("NilaiToPenguji")
   nilaiPembimbing   Nilai[] @relation("NilaiToPembimbing")
@@ -75,7 +75,7 @@ model Dokumen {
   @@index([nim])
 }
 
-model JadwalSeminar {
+model Jadwal {
   id            String        @id @default(uuid())
   nim           String
   nip           String
@@ -101,7 +101,7 @@ model JadwalSeminar {
 model Ruangan {
   id            String   @id @default(uuid())
   namaRuangan   String   @unique
-  jadwalSeminar JadwalSeminar[]
+  jadwal        Jadwal[]
 }
 
 model LogJadwal {
@@ -116,7 +116,7 @@ model LogJadwal {
   keterangan      String?
   createdAt       DateTime  @default(now())
 
-  jadwalSeminar   JadwalSeminar @relation(fields: [jadwalSeminarId], references: [id])
+  jadwalSeminar   Jadwal @relation(fields: [jadwalSeminarId], references: [id])
   dosen           Dosen         @relation(fields: [nip], references: [nip])
 
   @@index([jadwalSeminarId])
@@ -131,7 +131,7 @@ model Nilai {
   nilaiPembimbing   Float?
   nilaiPenguji      Float?
 
-  jadwalSeminar     JadwalSeminar? @relation(fields: [jadwalSeminarId], references: [id])
+  jadwalSeminar     Jadwal @relation(fields: [jadwalSeminarId], references: [id])
   dosenPenguji      Dosen? @relation("NilaiToPenguji", fields: [nipPenguji], references: [nip])
   dosenPembimbing   Dosen? @relation("NilaiToPembimbing", fields: [nipPembimbing], references: [nip])
 
