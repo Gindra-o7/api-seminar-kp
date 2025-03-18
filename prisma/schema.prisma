@@ -42,32 +42,32 @@ enum LogType {
 }
 
 model Mahasiswa {
-  nim           String     @id @unique
-  nama          String
-  noTelepon     String
+  nim             String     @id @unique
+  nama            String
+  no_telepon       String
 
-  dokumen       Dokumen[]
-  jadwalSeminar Jadwal[]
-  nilai         Nilai[]
+  dokumen         Dokumen[]
+  jadwal_seminar  Jadwal[]
+  nilai           Nilai[]
 }
 
 model Dosen {
   nip               String   @id @unique
   email             String   @unique
   nama              String
-  noTelepon         String
+  no_telepon        String
 
-  jadwalSeminar          Jadwal[]
-  nilaiPenguji      Nilai[] @relation("NilaiToPenguji")
-  nilaiPembimbing   Nilai[] @relation("NilaiToPembimbing")
+  jadwal_seminar          Jadwal[]
+  nilai_penguji      Nilai[] @relation("NilaiToPenguji")
+  nilai_pembimbing   Nilai[] @relation("NilaiToPembimbing")
 }
 
 model Dokumen {
   id            String          @id @default(uuid())
   nim           String
-  jenisDokumen  JenisDokumen
-  filePath      String
-  tanggalUpload DateTime        @default(now())
+  jenis_dokumen  JenisDokumen
+  file_path      String
+  tanggal_upload DateTime        @default(now())
   status        DokumenStatus   @default(submitted)
   komentar      String?
 
@@ -81,58 +81,55 @@ model Jadwal {
   nim           String
   nip           String
   tanggal       DateTime
-  waktuMulai    DateTime
-  waktuSelesai  DateTime
-  ruanganId     String
+  waktu_mulai   DateTime
+  waktu_selesai DateTime
+  ruangan_nama  String
   status        StatusSeminar @default(pending)
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
 
   mahasiswa     Mahasiswa   @relation(fields: [nim], references: [nim])
   dosen         Dosen       @relation(fields: [nip], references: [nip])
-  ruangan       Ruangan     @relation(fields: [ruanganId], references: [id])
+  ruangan       Ruangan     @relation(fields: [ruangan_nama], references: [nama])
   nilai         Nilai?
 
   @@index([nim])
   @@index([nip])
-  @@index([ruanganId])
+  @@index([ruangan_nama])
 }
 
 model Ruangan {
-  id            String   @id @default(uuid())
-  namaRuangan   String   @unique
-  jadwal        Jadwal[]
+  nama    String   @id @unique
+  jadwal  Jadwal[]
 }
 
 model LogJadwal {
   id              String    @id @default(uuid())
-  jadwalSeminarId String
-  logType         LogType
+  jadwal_seminar_id String
+  log_type         LogType
   nip             String
-  tanggalLama     DateTime?
-  tanggalBaru     DateTime?
-  ruanganLama     String?
-  ruanganBaru     String?
+  tanggal_lama     DateTime?
+  tanggal_baru     DateTime?
+  ruangan_lama     String?
+  ruangan_baru     String?
   keterangan      String?
-  createdAt       DateTime  @default(now())
+  created_at       DateTime  @default(now())
 
-  @@index([jadwalSeminarId])
+  @@index([jadwal_seminar_id])
 }
 
 model Nilai {
   id                String    @id @default(uuid())
   nim               String
-  jadwalSeminarId   String
-  nipPenguji        String
-  nipPembimbing     String
-  nilaiPembimbing   Float?
-  nilaiPenguji      Float?
+  jadwal_seminar_id   String
+  nip_penguji        String
+  nip_pembimbing     String
+  nilai_pembimbing   Float?
+  nilai_penguji      Float?
 
-  jadwalSeminar     Jadwal @relation(fields: [jadwalSeminarId], references: [id])
-  dosenPenguji      Dosen? @relation("NilaiToPenguji", fields: [nipPenguji], references: [nip])
-  dosenPembimbing   Dosen? @relation("NilaiToPembimbing", fields: [nipPembimbing], references: [nip])
+  jadwal_seminar     Jadwal @relation(fields: [jadwal_seminar_id], references: [id])
+  dosen_penguji      Dosen? @relation("NilaiToPenguji", fields: [nip_penguji], references: [nip])
+  dosen_pembimbing   Dosen? @relation("NilaiToPembimbing", fields: [nip_pembimbing], references: [nip])
 
-  @@index([jadwalSeminarId])
-  @@unique([jadwalSeminarId])
+  @@index([jadwal_seminar_id])
+  @@unique([jadwal_seminar_id])
   Mahasiswa Mahasiswa[]
 }
