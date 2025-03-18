@@ -56,7 +56,6 @@ model Dosen {
   nama          String
 
   jadwalSeminar          Jadwal[]
-  logJadwal              LogJadwal[]
   nilaiPenguji      Nilai[] @relation("NilaiToPenguji")
   nilaiPembimbing   Nilai[] @relation("NilaiToPembimbing")
 }
@@ -91,7 +90,6 @@ model Jadwal {
   dosen         Dosen       @relation(fields: [nip], references: [nip])
   ruangan       Ruangan     @relation(fields: [ruanganId], references: [id])
   nilai         Nilai?
-  logs          LogJadwal[]
 
   @@index([nim])
   @@index([nip])
@@ -115,9 +113,6 @@ model LogJadwal {
   ruanganBaru     String?
   keterangan      String?
   createdAt       DateTime  @default(now())
-
-  jadwalSeminar   Jadwal @relation(fields: [jadwalSeminarId], references: [id])
-  dosen           Dosen         @relation(fields: [nip], references: [nip])
 
   @@index([jadwalSeminarId])
 }
