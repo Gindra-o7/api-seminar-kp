@@ -42,9 +42,9 @@ enum LogType {
 }
 
 model Mahasiswa {
-  nim             String     @id @unique
+  nim             String    @id @unique
   nama            String
-  no_telepon       String
+  no_telepon      String    @unique
 
   dokumen         Dokumen[]
   jadwal_seminar  Jadwal[]
@@ -52,26 +52,26 @@ model Mahasiswa {
 }
 
 model Dosen {
-  nip               String   @id @unique
-  email             String   @unique
+  nip               String    @id @unique
+  email             String    @unique
   nama              String
-  no_telepon        String
+  no_telepon        String    @unique
 
-  jadwal_seminar          Jadwal[]
-  nilai_penguji      Nilai[] @relation("NilaiToPenguji")
-  nilai_pembimbing   Nilai[] @relation("NilaiToPembimbing")
+  jadwal_seminar    Jadwal[]
+  nilai_penguji     Nilai[] @relation("NilaiToPenguji")
+  nilai_pembimbing  Nilai[] @relation("NilaiToPembimbing")
 }
 
 model Dokumen {
-  id            String          @id @default(uuid())
-  nim           String
-  jenis_dokumen  JenisDokumen
-  file_path      String
-  tanggal_upload DateTime        @default(now())
-  status        DokumenStatus   @default(submitted)
-  komentar      String?
+  id              String          @id @default(uuid())
+  nim             String
+  jenis_dokumen   JenisDokumen
+  file_path       String
+  tanggal_upload  DateTime        @default(now())
+  status          DokumenStatus   @default(submitted)
+  komentar        String?
 
-  mahasiswa     Mahasiswa @relation(fields: [nim], references: [nim])
+  mahasiswa       Mahasiswa @relation(fields: [nim], references: [nim])
 
   @@index([nim])
 }
@@ -102,32 +102,32 @@ model Ruangan {
 }
 
 model LogJadwal {
-  id              String    @id @default(uuid())
+  id                String    @id @default(uuid())
   jadwal_seminar_id String
-  log_type         LogType
-  nip             String
-  tanggal_lama     DateTime?
-  tanggal_baru     DateTime?
-  ruangan_lama     String?
-  ruangan_baru     String?
-  keterangan      String?
-  created_at       DateTime  @default(now())
+  log_type          LogType
+  nip               String
+  tanggal_lama      DateTime?
+  tanggal_baru      DateTime?
+  ruangan_lama      String?
+  ruangan_baru      String?
+  keterangan        String?
+  created_at        DateTime  @default(now())
 
   @@index([jadwal_seminar_id])
 }
 
 model Nilai {
-  id                String    @id @default(uuid())
-  nim               String
+  id                  String    @id @default(uuid())
+  nim                 String
   jadwal_seminar_id   String
-  nip_penguji        String
-  nip_pembimbing     String
-  nilai_pembimbing   Float?
-  nilai_penguji      Float?
+  nip_penguji         String
+  nip_pembimbing      String
+  nilai_pembimbing    Float?
+  nilai_penguji       Float?
 
-  jadwal_seminar     Jadwal @relation(fields: [jadwal_seminar_id], references: [id])
-  dosen_penguji      Dosen? @relation("NilaiToPenguji", fields: [nip_penguji], references: [nip])
-  dosen_pembimbing   Dosen? @relation("NilaiToPembimbing", fields: [nip_pembimbing], references: [nip])
+  jadwal_seminar      Jadwal @relation(fields: [jadwal_seminar_id], references: [id])
+  dosen_penguji       Dosen? @relation("NilaiToPenguji", fields: [nip_penguji], references: [nip])
+  dosen_pembimbing    Dosen? @relation("NilaiToPembimbing", fields: [nip_pembimbing], references: [nip])
 
   @@index([jadwal_seminar_id])
   @@unique([jadwal_seminar_id])
